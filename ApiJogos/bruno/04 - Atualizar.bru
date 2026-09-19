@@ -1,0 +1,18 @@
+meta {
+  name: 04 - Atualizar
+  type: http
+  seq: 5
+}
+
+put {
+  url: {{baseUrl}}/api/jogos/3
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nome": "Elden Ring - Shadow of the Erdtree",
+    "genero": "RPG de Acao"
+  }
+}

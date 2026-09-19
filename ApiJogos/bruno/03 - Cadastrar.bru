@@ -1,0 +1,18 @@
+meta {
+  name: 03 - Cadastrar
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/api/jogos
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nome": "Elden Ring",
+    "genero": "RPG"
+  }
+}
