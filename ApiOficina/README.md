@@ -98,4 +98,4 @@ A Collection de testes está na pasta `bruno/` dentro deste repositório.
 **Environment:** `Local` → `baseUrl` = `http://localhost:5050`
 
 
-Link do vídeo:
+Link do vídeo: https://youtu.be/v6FWDmNujYk
