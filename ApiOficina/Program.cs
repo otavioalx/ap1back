@@ -1,4 +1,10 @@
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<ApiDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 var app = builder.Build();
 
 //Criar nossa lista
@@ -60,3 +66,22 @@ app.Run();
 
 record MotoDto(int Id, string Marca, string Modelo);
 record MotoEntradaDto(string Marca, string Modelo);
+
+// Model persistido: vira a tabela Motos no SQLite.
+// Os records acima continuam sendo usados pelos endpoints.
+class MotoEntity
+{
+    public int Id { get; set; }
+    public string Marca { get; set; } = string.Empty;
+    public string Modelo { get; set; } = string.Empty;
+}
+
+// Contexto do EF Core: recebe as opcoes configuradas no AddDbContext.
+class ApiDbContext : DbContext
+{
+    public ApiDbContext(DbContextOptions<ApiDbContext> options) : base(options)
+    {
+    }
+
+    public DbSet<MotoEntity> Motos => Set<MotoEntity>();
+}
