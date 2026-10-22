@@ -21,6 +21,13 @@ namespace ApiOficina.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("Ano")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Cor")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Marca")
                         .IsRequired()
                         .HasColumnType("TEXT");

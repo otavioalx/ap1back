@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ApiDbContext>(options =>
@@ -7,23 +6,22 @@ builder.Services.AddDbContext<ApiDbContext>(options =>
 
 var app = builder.Build();
 
-//Criar nossa lista
-var motos = new List<MotoDto>
-{
-    new MotoDto(1, "Honda", "CG 160"),
-    new MotoDto(2, "Yamaha", "Fazer 250")
-};
+app.UseDefaultFiles();
+app.UseStaticFiles();
 
-app.MapGet("/", () => "API da Oficina esta no ar");
+app.MapGet("/",  () => "API da Oficina esta no ar");
 
-app.MapGet("/api/motos", () =>
+app.MapGet("/api/motos", async(ApiDbContext db) =>
 {
+    var motos = await db.Motos.ToListAsync();
     return Results.Ok(motos);
 });
 
-app.MapGet("/api/motos/{id:int}", (int id) =>
+
+
+app.MapGet("/api/motos/{id:int}", async (int id, ApiDbContext db) =>
 {
-    var moto = motos.Find(motoDaLista => motoDaLista.Id == id);
+    var moto = await db.Motos.FindAsync(id);
     if (moto is null)
     {
         return Results.NotFound();
@@ -31,57 +29,66 @@ app.MapGet("/api/motos/{id:int}", (int id) =>
     return Results.Ok(moto);
 });
 
-app.MapPost("/api/motos", (MotoEntradaDto dados) =>
+
+
+app.MapPost("/api/motos", async (MotoEntity dados, ApiDbContext db) =>
 {
-    int proximoId = motos.Count + 1;
-    var novaMoto = new MotoDto(proximoId, dados.Marca, dados.Modelo);
-    motos.Add(novaMoto);
-    return Results.Created($"/api/motos/{novaMoto.Id}", novaMoto);
+    db.Motos.Add(dados);
+    await db.SaveChangesAsync();
+    return Results.Created($"/api/motos/{dados.Id}", dados);
 });
 
-app.MapPut("/api/motos/{id:int}", (int id, MotoEntradaDto dados) =>
+
+
+app.MapPut("/api/motos/{id:int}", async (int id, MotoEntity dados, ApiDbContext db) =>
 {
-    int indice = motos.FindIndex(motoDaLista => motoDaLista.Id == id);
-    if (indice == -1)
+    var moto = await db.Motos.FindAsync(id);
+        if (moto is null)
     {
         return Results.NotFound();
     }
-    var motoAtualizada = new MotoDto(id, dados.Marca, dados.Modelo);
-    motos[indice] = motoAtualizada;
-    return Results.Ok(motoAtualizada);
+    
+    moto.Marca = dados.Marca;
+    moto.Modelo = dados.Modelo;
+    moto.Ano = dados.Ano;
+    moto.Cor = dados.Cor;
+    await db.SaveChangesAsync();
+    return Results.Ok(moto);
 });
 
-app.MapDelete("/api/motos/{id:int}", (int id) =>
+
+
+app.MapDelete("/api/motos/{id:int}", async (int id, ApiDbContext db) =>
 {
-    int indice = motos.FindIndex(motoDaLista => motoDaLista.Id == id);
-    if (indice == -1)
-    {
-        return Results.NotFound();
-    }
-    motos.RemoveAt(indice);
+    var moto = await db.Motos.FindAsync(id);
+    if (moto is null) return Results.NotFound();
+    db.Motos.Remove(moto);
+    await db.SaveChangesAsync();
     return Results.NoContent();
+
 });
+
+
 
 app.Run();
 
-record MotoDto(int Id, string Marca, string Modelo);
-record MotoEntradaDto(string Marca, string Modelo);
 
-// Model persistido: vira a tabela Motos no SQLite.
-// Os records acima continuam sendo usados pelos endpoints.
+
 class MotoEntity
 {
     public int Id { get; set; }
     public string Marca { get; set; } = string.Empty;
     public string Modelo { get; set; } = string.Empty;
+    public int Ano { get; set; }
+    public string Cor { get; set; } = string.Empty;
 }
 
-// Contexto do EF Core: recebe as opcoes configuradas no AddDbContext.
+
+
 class ApiDbContext : DbContext
 {
     public ApiDbContext(DbContextOptions<ApiDbContext> options) : base(options)
     {
     }
-
     public DbSet<MotoEntity> Motos => Set<MotoEntity>();
 }

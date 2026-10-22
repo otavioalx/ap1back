@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oficina de Motos — Sistema de Gerenciamento</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Cabeçalho -->
+    <header class="header">
+        <div class="container">
+            <h1>🏍️ Oficina de Motos</h1>
+            <p class="subtitle">Sistema de Gerenciamento de Manutenção</p>
+        </div>
+    </header>
+
+    <!-- Conteúdo principal -->
+    <main class="container">
+
+        <!-- Banner de erro global da API -->
+        <div id="errorBanner" class="alert alert-error" style="display: none;" role="alert">
+            <span class="alert-icon">⚠️</span>
+            <div class="alert-content">
+                <strong id="errorTitle">Erro na requisição:</strong>
+                <span id="errorMessage"></span>
+            </div>
+            <button type="button" class="btn-close" id="btnCloseError" aria-label="Fechar erro">&times;</button>
+        </div>
+
+        <!-- Estatísticas -->
+        <section class="stats">
+            <div class="stat-card">
+                <span class="stat-number" id="totalMotos">0</span>
+                <span class="stat-label">Total de Motos</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number" id="totalMarcas">0</span>
+                <span class="stat-label">Marcas Diferentes</span>
+            </div>
+        </section>
+
+        <!-- Formulário de cadastro / edição -->
+        <section class="card form-section">
+            <h2 id="formTitle">➕ Cadastrar Nova Moto</h2>
+            <form id="motoForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="marca">Marca</label>
+                        <input type="text" id="marca" placeholder="Ex: Honda, Yamaha, Suzuki" required autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label for="modelo">Modelo</label>
+                        <input type="text" id="modelo" placeholder="Ex: CG 160, Fazer 250, GSX-S150" required autocomplete="off">
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary" id="btnSubmit">Cadastrar Moto</button>
+                    <button type="button" class="btn btn-secondary" id="btnCancel" style="display: none;">Cancelar Edição</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Tabela de motos -->
+        <section class="card">
+            <div class="card-header">
+                <h2>📋 Motos na Oficina</h2>
+                <button type="button" class="btn btn-refresh" id="btnRefresh" title="Recarregar lista da API">🔄 Atualizar</button>
+            </div>
+
+            <!-- Indicador de carregamento -->
+            <div id="loadingIndicator" class="loading-state" style="display: none;">
+                <div class="spinner"></div>
+                <span>Carregando motos da API...</span>
+            </div>
+
+            <!-- Tabela com listagem -->
+            <div class="table-wrapper" id="tableWrapper" style="display: none;">
+                <table id="motosTable">
+                    <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Marca</th>
+                            <th scope="col">Modelo</th>
+                            <th scope="col" class="th-actions">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="motosBody">
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Mensagem de lista vazia -->
+            <div class="empty-message" id="emptyMessage" style="display: none;">
+                <p>Nenhuma moto cadastrada no momento.</p>
+                <small>Utilize o formulário acima para cadastrar a primeira moto.</small>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="footer">
+        <div class="container">
+            <p>API Oficina de Motos &copy; Gerenciamento Integrado</p>
+        </div>
+    </footer>
+
+    <!-- Notificação toast -->
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
