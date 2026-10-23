@@ -62,7 +62,7 @@ http://localhost:5050/index.html
 
 ### Recursos disponíveis na Interface:
 * **Listagem:** Carrega automaticamente todas as motos salvas no banco de dados SQLite.
-* **Cadastro:** Formulário para inserção de novas motos (`Marca` e `Modelo`).
+* **Cadastro:** Formulário para inserção de novas motos (`Marca`, `Modelo`, `Ano` e `Cor`).
 * **Edição:** Permite selecionar uma moto existente, preencher os campos e salvar as alterações via `PUT`.
 * **Exclusão:** Confirmação e remoção imediata via `DELETE`.
 * **Tratamento de Estados:** Indicador visual de carregamento (*spinner*), mensagem para lista vazia e avisos de erro em caso de falha de conexão ou HTTP.
@@ -87,7 +87,9 @@ http://localhost:5050/index.html
 ```json
 {
   "marca": "Suzuki",
-  "modelo": "GSX-S150"
+  "modelo": "GSX-S150",
+  "ano": 2024,
+  "cor": "Azul"
 }
 ```
 
@@ -95,7 +97,9 @@ http://localhost:5050/index.html
 ```json
 {
   "marca": "Suzuki",
-  "modelo": "GSX-S150 Sport"
+  "modelo": "GSX-S150 Sport",
+  "ano": 2025,
+  "cor": "Preta"
 }
 ```
 

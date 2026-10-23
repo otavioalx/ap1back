@@ -1,7 +1,7 @@
 /**
  * Oficina de Motos — Integração com API REST
  * Operações: Listar (GET), Cadastrar (POST), Atualizar (PUT) e Excluir (DELETE)
- * Utiliza rigorosamente endpoints e contratos da collection Bruno.
+ * Campos: id, marca, modelo, ano, cor
  */
 
 (function () {
@@ -19,6 +19,8 @@
 
     var inputMarca = document.getElementById("marca");
     var inputModelo = document.getElementById("modelo");
+    var inputAno = document.getElementById("ano");
+    var inputCor = document.getElementById("cor");
 
     var tableWrapper = document.getElementById("tableWrapper");
     var tbody = document.getElementById("motosBody");
@@ -96,6 +98,8 @@
         btnCancel.disabled = submitting;
         inputMarca.disabled = submitting;
         inputModelo.disabled = submitting;
+        inputAno.disabled = submitting;
+        inputCor.disabled = submitting;
     }
 
     /**
@@ -162,6 +166,16 @@
             tdModelo.textContent = moto.modelo || "-";
             tr.appendChild(tdModelo);
 
+            // Coluna Ano
+            var tdAno = document.createElement("td");
+            tdAno.textContent = (moto.ano && moto.ano > 0) ? String(moto.ano) : "-";
+            tr.appendChild(tdAno);
+
+            // Coluna Cor
+            var tdCor = document.createElement("td");
+            tdCor.textContent = moto.cor || "-";
+            tr.appendChild(tdCor);
+
             // Coluna Ações
             var tdAcoes = document.createElement("td");
             tdAcoes.className = "actions-cell";
@@ -173,6 +187,8 @@
             btnEdit.setAttribute("data-id", String(moto.id));
             btnEdit.setAttribute("data-marca", moto.marca || "");
             btnEdit.setAttribute("data-modelo", moto.modelo || "");
+            btnEdit.setAttribute("data-ano", (moto.ano && moto.ano > 0) ? String(moto.ano) : "");
+            btnEdit.setAttribute("data-cor", moto.cor || "");
 
             var btnDelete = document.createElement("button");
             btnDelete.type = "button";
@@ -341,15 +357,29 @@
 
         var marca = inputMarca.value.trim();
         var modelo = inputModelo.value.trim();
+        var ano = parseInt(inputAno.value, 10);
+        var cor = inputCor.value.trim();
 
         if (!marca || !modelo) {
             showError("Validação:", "Preencha a Marca e o Modelo da moto.");
             return;
         }
 
+        if (isNaN(ano) || ano < 1900 || ano > 2100) {
+            showError("Validação:", "Informe um ano válido para a moto (ex: 2024).");
+            return;
+        }
+
+        if (!cor) {
+            showError("Validação:", "Informe a cor da moto.");
+            return;
+        }
+
         var payload = {
             marca: marca,
-            modelo: modelo
+            modelo: modelo,
+            ano: ano,
+            cor: cor
         };
 
         if (editingId !== null) {
@@ -397,10 +427,14 @@
         if (target.classList.contains("btn-edit")) {
             var marca = target.getAttribute("data-marca") || "";
             var modelo = target.getAttribute("data-modelo") || "";
+            var ano = target.getAttribute("data-ano") || "";
+            var cor = target.getAttribute("data-cor") || "";
 
             editingId = id;
             inputMarca.value = marca;
             inputModelo.value = modelo;
+            inputAno.value = ano;
+            inputCor.value = cor;
 
             formTitle.textContent = "✏️ Editar Moto #" + String(id);
             btnSubmit.textContent = "Salvar Alterações";

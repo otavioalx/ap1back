@@ -54,6 +54,14 @@
                         <label for="modelo">Modelo</label>
                         <input type="text" id="modelo" placeholder="Ex: CG 160, Fazer 250, GSX-S150" required autocomplete="off">
                     </div>
+                    <div class="form-group">
+                        <label for="ano">Ano</label>
+                        <input type="number" id="ano" placeholder="Ex: 2024" min="1950" max="2035" required autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label for="cor">Cor</label>
+                        <input type="text" id="cor" placeholder="Ex: Vermelha, Preta, Azul" required autocomplete="off">
+                    </div>
                 </div>
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary" id="btnSubmit">Cadastrar Moto</button>
@@ -83,6 +91,8 @@
                             <th scope="col">ID</th>
                             <th scope="col">Marca</th>
                             <th scope="col">Modelo</th>
+                            <th scope="col">Ano</th>
+                            <th scope="col">Cor</th>
                             <th scope="col" class="th-actions">Ações</th>
                         </tr>
                     </thead>
