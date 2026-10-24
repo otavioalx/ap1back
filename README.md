@@ -116,7 +116,5 @@ A collection de testes automatizados está localizada na pasta [`ApiOficina/brun
 ---
 
 ## 8. Vídeo de Demonstração — AP2
-> [!IMPORTANT]
-> O link abaixo deve ser público e testado em janela anônima para garantir que o avaliador tenha acesso imediato sem solicitações de permissão.
 
 * **Link público do vídeo:** https://youtu.be/jhTvzDqJE9Q
