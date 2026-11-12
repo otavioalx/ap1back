@@ -5,6 +5,17 @@ builder.Services.AddDbContext<ApiDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
+app.UseExceptionHandler(errorApp =>
+{
+    errorApp.Run(async context =>
+    {
+        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+        context.Response.ContentType = "application/json";
+        await context.Response.WriteAsJsonAsync(new {mensagem = "Ocorreu um erro interno. Tente novamente mais tarde."});
+    });
+});
+
+
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
@@ -16,6 +27,14 @@ app.MapGet("/api/motos", async(ApiDbContext db) =>
     var motos = await db.Motos.ToListAsync();
     return Results.Ok(motos);
 });
+
+
+
+
+
+app.MapGet("/api/teste-erro", () => {throw new InvalidOperationException("Falha simulada para teste.");});
+
+
 
 
 
