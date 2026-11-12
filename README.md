@@ -5,59 +5,72 @@ dotnet run --urls http://localhost:5050
 
 ## Como Abrir a Interface Web
 http://localhost:5050/index.html
+```
+*(ou simplesmente `http://localhost:5050/`)*
 
+### Recursos disponíveis na Interface:
+* **Listagem:** Carrega automaticamente todas as motos salvas no banco de dados SQLite.
+* **Cadastro:** Formulário para inserção de novas motos (`Marca` e `Modelo`).
+* **Edição:** Permite selecionar uma moto existente, preencher os campos e salvar as alterações via `PUT`.
+* **Exclusão:** Confirmação e remoção imediata via `DELETE`.
+* **Tratamento de Estados:** Indicador visual de carregamento (*spinner*), mensagem para lista vazia e avisos de erro em caso de falha de conexão ou HTTP.
+* **Segurança:** Manipulação do DOM realizada com `textContent` para mitigação de vulnerabilidades XSS.
 
+---
 
+## 6. Endpoints e Contrato da API
 
+| Método | Rota | Descrição | Status Sucesso | Status Erro |
+|---|---|---|---|---|
+| `GET` | `/` | Healthcheck simples da API | `200 OK` | - |
+| `GET` | `/api/motos` | Lista todas as motos cadastradas | `200 OK` | `500` |
+| `GET` | `/api/motos/{id}` | Busca os dados de uma moto por ID | `200 OK` | `404 Not Found` |
+| `POST` | `/api/motos` | Cadastra uma nova moto no SQLite | `201 Created` | `400 Bad Request` |
+| `PUT` | `/api/motos/{id}` | Atualiza marca e modelo da moto | `200 OK` | `404 Not Found` |
+| `DELETE` | `/api/motos/{id}` | Remove a moto informada do banco | `204 No Content` | `404 Not Found` |
 
+### Exemplos de Payload JSON
 
+#### `POST /api/motos`
+```json
+{
+  "marca": "Suzuki",
+  "modelo": "GSX-S150"
+}
+```
 
+#### `PUT /api/motos/1`
+```json
+{
+  "marca": "Suzuki",
+  "modelo": "GSX-S150 Sport"
+}
+```
 
+---
 
+## 7. Collection de Testes (Bruno)
+A collection de testes automatizados está localizada na pasta [`ApiOficina/bruno/`](file:///c:/Users/milen/Desktop/backand/ap1/ApiOficina/bruno):
+* `00 - API no ar.bru`: Validação da rota raiz `GET /`.
+* `01 - Listar.bru`: `GET /api/motos` (retorna array JSON com status 200).
+* `02 - Buscar por id.bru`: `GET /api/motos/1` (retorna o objeto correspondente).
+* `03 - Cadastrar.bru`: `POST /api/motos` (cria registro com status 201).
+* `04 - Atualizar.bru`: `PUT /api/motos/3` (atualiza com status 200).
+* `05 - Remover.bru`: `DELETE /api/motos/3` (remove com status 204).
+* `06 - Confirmar remocao.bru`: `GET /api/motos/3` (confirma exclusão retornando status 404).
 
+**Ambiente configurado:** `Local` com a variável `baseUrl = http://localhost:5050`.
 
+---
 
+## 8. Vídeo de Demonstração — AP2
+> [!IMPORTANT]
+> O link abaixo deve ser público e testado em janela anônima para garantir que o avaliador tenha acesso imediato sem solicitações de permissão.
 
+* **Link público do vídeo:** `https://youtu.be/SEU_LINK_AQUI` *(Substitua por seu link público)*
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+---
+---
 
 # SEÇÃO 2: ROTEIRO COMPLETO PARA O VÍDEO DE DEMONSTRAÇÃO
 
@@ -153,3 +166,4 @@ Este roteiro foi estruturado para guiá-lo passo a passo durante a gravação da
   * Retorne ao VS Code com o `README.md` visível, apontando para a seção do link do vídeo.
 * **O que falar:**
   > *"Com isso, cobrimos 100% dos requisitos da AP2: persistência com SQLite e EF Core, CRUD completo com respostas HTTP corretas, testes no Bruno, frontend funcional integrado sem dados fictícios e persistência comprovada após o reinício da aplicação. O link deste vídeo está disponível publicamente no README do repositório. Muito obrigado!"*
+
